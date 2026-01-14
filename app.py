@@ -158,7 +158,7 @@ st.sidebar.info("Os dados são carregados diretamente do seu repositório GitHub
 # Mapeamento dos seus arquivos (VOCÊ VAI SUBSTITUIR PELS SEUS LINKS RAW DO GITHUB AQUI)
 # Exemplo: https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPO/main/Oraculo_DB_Master%20-%20Mega_Sena.csv
 files = {
-    "Mega Sena": "LINK_RAW_DA_MEGA_SENA_AQUI", 
+    "Mega Sena": "https://docs.google.com/spreadsheets/d/e/2PACX-1vSHPmYqIsBMWIzdMlnuKfPDI5BI4UG_WMEdMP6OwUeojDThvp0fI6J7fywO_T7ynVsk30-JuhJJQng6/pub?gid=631468251&single=true&output=csv", 
     "Lotofácil": "LINK_RAW_DA_LOTOFACIL_AQUI",
     "Quina": "LINK_RAW_DA_QUINA_AQUI",
     "Lotomania": "LINK_RAW_DA_LOTOMANIA_AQUI",
