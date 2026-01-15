@@ -1,0 +1,47 @@
+{
+  "spreadsheet_id": "1Uawi-DjZiY5wVZyqntQYctboRPqvu1vBFoiL7h4GkMw",
+  "loterias": {
+    "Mega Sena": {
+      "aba_historico": "Mega Sena",
+      "aba_palpites": "Palpites_Mega_Sena",
+      "max_dezenas": 60,
+      "tamanho_jogo": 6
+    },
+    "Lotofácil": {
+      "aba_historico": "Lotofacil",
+      "aba_palpites": "Palpites_Lotofacil",
+      "max_dezenas": 25,
+      "tamanho_jogo": 15
+    },
+    "Quina": {
+      "aba_historico": "Quina",
+      "aba_palpites": "Palpites_Quina",
+      "max_dezenas": 80,
+      "tamanho_jogo": 5
+    },
+    "Dia de Sorte": {
+      "aba_historico": "Dia de Sorte",
+      "aba_palpites": "Palpites_diadesorte",
+      "max_dezenas": 31,
+      "tamanho_jogo": 7
+    },
+    "Timemania": {
+      "aba_historico": "Timemania",
+      "aba_palpites": "Palpites_Timenia",
+      "max_dezenas": 80,
+      "tamanho_jogo": 7
+    },
+    "Dupla Sena": {
+      "aba_historico": "Dupla Sena",
+      "aba_palpites": "Palpites_DuplaSena",
+      "max_dezenas": 50,
+      "tamanho_jogo": 6
+    },
+    "Lotomania": {
+      "aba_historico": "Lotomania",
+      "aba_palpites": "Palpites_Lotomania",
+      "max_dezenas": 100,
+      "tamanho_jogo": 50
+    }
+  }
+}
