@@ -1,15 +1,15 @@
 {
-  "spreadsheet_id": "1Uawi-DjZiY5wVZyqntQYctboRPqvu1vBFoiL7h4GkMw",
+  "spreadsheet_id": "SEU_ID_DA_PLANILHA_AQUI",
   "loterias": {
     "Mega Sena": {
       "aba_historico": "Mega Sena",
-      "aba_palpites": "Palpites_Mega_Sena",
+      "aba_palpites": "Palpites_Mega",
       "max_dezenas": 60,
       "tamanho_jogo": 6
     },
     "Lotofácil": {
-      "aba_historico": "Lotofacil",
-      "aba_palpites": "Palpites_Lotofacil",
+      "aba_historico": "Lotofácil",
+      "aba_palpites": "Palpites_Loto",
       "max_dezenas": 25,
       "tamanho_jogo": 15
     },
@@ -21,27 +21,27 @@
     },
     "Dia de Sorte": {
       "aba_historico": "Dia de Sorte",
-      "aba_palpites": "Palpites_diadesorte",
+      "aba_palpites": "Palpites_Dia",
       "max_dezenas": 31,
-      "tamanho_jogo": 7
-    },
-    "Timemania": {
-      "aba_historico": "Timemania",
-      "aba_palpites": "Palpites_Timenia",
-      "max_dezenas": 80,
       "tamanho_jogo": 7
     },
     "Dupla Sena": {
       "aba_historico": "Dupla Sena",
-      "aba_palpites": "Palpites_DuplaSena",
+      "aba_palpites": "Palpites_Dupla",
       "max_dezenas": 50,
       "tamanho_jogo": 6
     },
     "Lotomania": {
       "aba_historico": "Lotomania",
-      "aba_palpites": "Palpites_Lotomania",
+      "aba_palpites": "Palpites_Mania",
       "max_dezenas": 100,
       "tamanho_jogo": 50
+    },
+    "Timemania": {
+      "aba_historico": "Timemania",
+      "aba_palpites": "Palpites_Time",
+      "max_dezenas": 80,
+      "tamanho_jogo": 10
     }
   }
 }
