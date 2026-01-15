@@ -1,171 +1,181 @@
 import pandas as pd
 
-# --- CSS DO DASHBOARD (Design Claro) ---
+# --- CSS INTELIGENTE (ADAPTÁVEL) ---
 CSS_ESTILO = """
 <style>
-    /* Container do Card */
+    /* --- ESTRUTURA BASE DO CARD --- */
     .card-loteria {
         background-color: #ffffff;
         border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.05); /* Sombra suave */
-        padding: 24px;
-        margin-bottom: 24px;
-        border: 1px solid #f3f4f6;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid #f0f2f5;
         transition: all 0.3s ease;
         position: relative;
-        overflow: hidden;
     }
     .card-loteria:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
-        border-color: #bfdbfe;
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.08);
     }
 
-    /* Cabeçalho */
+    /* --- CABEÇALHO --- */
     .card-header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #f0f2f5;
+        padding-bottom: 10px;
     }
     .card-title {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
         font-weight: 800;
-        color: #111827; /* Cinza quase preto */
+        color: #374151;
         margin: 0;
     }
     .card-conc {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         color: #9ca3af;
-        font-weight: 500;
+        margin-top: 2px;
     }
-    
-    /* Badge de Status */
+
+    /* --- BADGES (Etiquetas) --- */
     .status-badge {
-        font-size: 0.7rem;
-        padding: 4px 10px;
-        border-radius: 20px;
+        font-size: 0.65rem;
+        padding: 3px 8px;
+        border-radius: 12px;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        display: inline-block;
     }
-    .badge-acumulado { 
-        background-color: #fffbeb; 
-        color: #b45309; 
-        border: 1px solid #fcd34d; 
-    }
-    .badge-normal { 
-        background-color: #f9fafb; 
-        color: #6b7280; 
-        border: 1px solid #e5e7eb; 
-    }
+    .bg-acumulado { background-color: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
+    .bg-normal { background-color: #f3f4f6; color: #9ca3af; }
 
-    /* Bolas */
-    .balls-row {
+    /* --- BOLAS (Design Adaptativo) --- */
+    .balls-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 20px;
-    }
-    .ball-style {
-        width: 36px;
-        height: 36px;
-        background: linear-gradient(145deg, #3b82f6, #2563eb);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 0.95rem;
-        box-shadow: 2px 2px 5px rgba(37, 99, 235, 0.2);
+        gap: 6px; /* Espaço entre as bolas */
+        justify-content: center; /* Centraliza as bolas */
+        margin: 15px 0;
     }
 
-    /* Rodapé com Ação */
-    .card-action {
-        background-color: #f8fafc;
-        border-radius: 12px;
-        padding: 12px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-    .traffic-light {
-        width: 14px;
-        height: 14px;
+    /* Estilo Padrão (Mega Sena, Quina - Azul) */
+    .ball-standard {
+        width: 34px;
+        height: 34px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
         border-radius: 50%;
-        flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 0.9rem;
+        box-shadow: 0 2px 5px rgba(37, 99, 235, 0.25);
     }
-    .light-go { background-color: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
-    .light-wait { background-color: #f59e0b; }
+
+    /* Estilo Compacto (Lotofácil - Roxo) */
+    .ball-loto {
+        width: 28px; /* Menor para caber 15 */
+        height: 28px;
+        background: linear-gradient(135deg, #d946ef, #c026d3); /* Gradiente Roxo */
+        color: white;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 0.8rem; /* Fonte menor */
+        box-shadow: 0 2px 4px rgba(192, 38, 211, 0.25);
+    }
+
+    /* --- RODAPÉ (Sinal do Motor) --- */
+    .card-footer {
+        background-color: #f9fafb;
+        margin: -20px -20px -20px -20px; /* Expande para as bordas */
+        padding: 12px 20px;
+        margin-top: 15px;
+        border-radius: 0 0 16px 16px;
+        display: flex; align-items: center; gap: 8px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-green { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
+    .dot-yellow { background-color: #f59e0b; }
     
-    .action-text {
-        font-size: 0.9rem;
-        font-weight: 700;
-        line-height: 1.2;
-    }
-    .txt-go { color: #047857; }
-    .txt-wait { color: #b45309; }
+    .footer-text { font-size: 0.85rem; font-weight: 700; }
+    .txt-green { color: #047857; }
+    .txt-yellow { color: #d97706; }
 </style>
 """
 
 def gerar_html_card(nome_loteria, motor):
     """
-    Recebe o Motor Matemático (já carregado com dados) e retorna o HTML do card.
+    Gera o HTML do card, adaptando o estilo se for Lotofácil ou Mega Sena.
     """
-    # 1. Extração de Dados do Motor
+    # 1. Obter dados do Motor
     txt_sinal, tipo_sinal = motor.analisar_sinal()
     
     try:
+        # Tenta ler a última linha com segurança
         if motor.df is not None and not motor.df.empty:
             last = motor.df.iloc[0]
-            # Extrai números e converte para inteiro
+            concurso = last.get('Concurso', '---')
+            
+            # Extrai números
             numeros = []
             for c in motor.cols:
                 val = last.get(c)
-                try: numeros.append(int(float(val)))
+                try: 
+                    if val and str(val).strip():
+                        numeros.append(int(float(val)))
                 except: pass
-            
-            concurso = last.get('Concurso', '---')
         else:
             numeros = []
-            concurso = "---"
+            concurso = "--"
     except:
         numeros = []
         concurso = "Erro"
 
-    # 2. Definição de Estilos Condicionais
-    if "ACUMULADO" in txt_sinal or "ACUMULOU" in txt_sinal:
-        badge_html = '<span class="status-badge badge-acumulado">Acumulou!</span>'
+    # 2. DEFINIR IDENTIDADE VISUAL (A Mágica acontece aqui)
+    nome_limpo = nome_loteria.lower()
+    
+    if "lotof" in nome_limpo: # Detecta Lotofácil
+        classe_bola = "ball-loto" # Usa a bola roxa e pequena
+        cor_titulo = "#9d174d" # Um tom de vinho/roxo escuro para o título
     else:
-        badge_html = '<span class="status-badge badge-normal">Normal</span>'
+        classe_bola = "ball-standard" # Usa a bola azul padrão
+        cor_titulo = "#1e3a8a" # Azul escuro
 
-    cor_luz = "light-go" if tipo_sinal == "go" else "light-wait"
-    cor_texto = "txt-go" if tipo_sinal == "go" else "txt-wait"
+    # 3. Lógica de Status (Acumulado)
+    if "ACUMULADO" in txt_sinal or "ACUMULOU" in txt_sinal:
+        badge = '<span class="status-badge bg-acumulado">Acumulou! 💰</span>'
+    else:
+        badge = '<span class="status-badge bg-normal">Normal</span>'
 
-    # Gera o HTML das bolinhas
-    bolas_html = "".join([f'<div class="ball-style">{n}</div>' for n in numeros])
+    # 4. Lógica do Sinal (Semáforo)
+    classe_luz = "dot-green" if tipo_sinal == "go" else "dot-yellow"
+    classe_txt = "txt-green" if tipo_sinal == "go" else "txt-yellow"
 
-    # 3. Montagem do Bloco HTML
+    # Gera HTML das bolas
+    html_bolas = "".join([f'<div class="{classe_bola}">{n}</div>' for n in numeros])
+
+    # 5. Retorna o HTML Montado
     return f"""
-    <div class="card-loteria">
+    <div class="card-loteria" style="border-top: 4px solid {cor_titulo}">
         <div class="card-header">
             <div>
-                <h3 class="card-title">{nome_loteria}</h3>
+                <div class="card-title" style="color:{cor_titulo}">{nome_loteria}</div>
                 <div class="card-conc">Conc. {concurso}</div>
             </div>
-            {badge_html}
+            {badge}
         </div>
         
-        <div class="balls-row">
-            {bolas_html}
+        <div class="balls-container">
+            {html_bolas}
         </div>
         
-        <div class="card-action">
-            <div class="traffic-light {cor_luz}"></div>
-            <div class="action-text {cor_texto}">
+        <div class="card-footer">
+            <div class="dot {classe_luz}"></div>
+            <div class="footer-text {classe_txt}">
                 {txt_sinal}
             </div>
         </div>
     </div>
     """
+    
