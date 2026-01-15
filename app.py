@@ -12,7 +12,7 @@ st.set_page_config(page_title="Oráculo Master | JSON Config", page_icon="🔮",
 
 # --- 1. CARREGAR CONFIGURAÇÃO DO GITHUB (O CÉREBRO) ---
 # Substitua este link pelo seu link RAW do arquivo config_loterias.json que você criou
-URL_CONFIG_JSON = "https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPO/main/config_loterias.json"
+URL_CONFIG_JSON = "https://raw.githubusercontent.com/silasgardin/masterV/refs/heads/main/config_loterias.json"
 
 @st.cache_data(ttl=600) # Atualiza a config a cada 10 min
 def carregar_configuracoes():
