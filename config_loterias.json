@@ -20,26 +20,26 @@
       "tamanho_jogo": 5
     },
     "Dia de Sorte": {
-      "aba_historico": "Dia de Sorte",
-      "aba_palpites": "Palpites_Dia",
+      "aba_historico": "Dia_de_Sorte",
+      "aba_palpites": "Palpites_Diadesorte",
       "max_dezenas": 31,
       "tamanho_jogo": 7
     },
     "Dupla Sena": {
-      "aba_historico": "Dupla Sena",
-      "aba_palpites": "Palpites_Dupla",
+      "aba_historico": "Dupla_Sena",
+      "aba_palpites": "Palpites_DuplaSena",
       "max_dezenas": 50,
       "tamanho_jogo": 6
     },
     "Lotomania": {
       "aba_historico": "Lotomania",
-      "aba_palpites": "Palpites_Mania",
+      "aba_palpites": "Palpites_Lotomania",
       "max_dezenas": 100,
       "tamanho_jogo": 50
     },
     "Timemania": {
       "aba_historico": "Timemania",
-      "aba_palpites": "Palpites_Time",
+      "aba_palpites": "Palpites_Timemania",
       "max_dezenas": 80,
       "tamanho_jogo": 10
     }
