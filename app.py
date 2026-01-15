@@ -24,7 +24,7 @@ except ImportError:
 
 # --- CARREGAR CONFIGURAÇÃO (JSON) ---
 # ATENÇÃO: Verifique se este LINK está correto para o seu repositório
-URL_CONFIG = "https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPO/main/config_loterias.json"
+URL_CONFIG = "https://raw.githubusercontent.com/silasgardin/masterV/refs/heads/main/config_loterias.json"
 
 @st.cache_data(ttl=600)
 def load_config():
