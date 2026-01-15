@@ -1,185 +1,255 @@
 import pandas as pd
 
-# --- DESIGN SYSTEM AVANÇADO ---
+# --- CSS MODERNIZADO (BIG CARDS) ---
 CSS_ESTILO = """
 <style>
-    /* --- 1. LIMPEZA GERAL (Whitelabel) --- */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    
-    .block-container {
-        padding-top: 2rem !important; /* Sobe o conteúdo */
-    }
+    /* Reset e Ajustes Gerais */
+    .block-container { padding-top: 2rem !important; }
+    #MainMenu, footer, header { visibility: hidden; }
 
-    /* --- 2. ANIMAÇÕES (Pulse) --- */
-    @keyframes pulse-green {
-        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-        70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    /* --- ANIMAÇÕES --- */
+    @keyframes pulse-border {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
         100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
-    
-    @keyframes pulse-yellow {
-        0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
-        70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
-    }
 
-    /* --- 3. CARDS DO DASHBOARD --- */
+    /* --- CARD CONTAINER (Maior e mais espaçado) --- */
     .card-loteria {
-        background-color: #ffffff;
-        border-radius: 16px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        padding: 20px;
-        margin-bottom: 20px;
-        border: 1px solid #f0f2f5;
-        transition: all 0.3s ease;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid #f1f5f9;
+        padding: 0; /* Padding controlado internamente */
+        margin-bottom: 25px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden; /* Para o cabeçalho não vazar */
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Altura igual para todos na linha */
     }
+    
     .card-loteria:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        border-color: #cbd5e1;
     }
 
-    /* Cabeçalho do Card */
-    .card-header {
-        display: flex; justify-content: space-between; align-items: flex-start;
-        margin-bottom: 15px; border-bottom: 1px solid #f0f2f5; padding-bottom: 10px;
+    /* --- CABEÇALHO (Cor da Marca) --- */
+    .card-top {
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        font-weight: bold;
     }
-    .card-title { font-size: 1.1rem; font-weight: 800; margin: 0; }
-    .card-conc { font-size: 0.75rem; color: #9ca3af; }
-
-    /* Badges */
-    .status-badge { font-size: 0.65rem; padding: 3px 8px; border-radius: 12px; font-weight: 700; text-transform: uppercase; }
-    .bg-acumulado { background-color: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
-    .bg-normal { background-color: #f3f4f6; color: #9ca3af; }
-
-    /* Bolas do Dashboard (Pequenas) */
-    .balls-container { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin: 15px 0; }
-    
-    .ball-dash {
-        width: 28px; height: 28px;
-        color: white; border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        font-weight: 700; font-size: 0.8rem;
-    }
-
-    /* Rodapé com Luzes */
-    .card-footer {
-        background-color: #f9fafb; margin: -20px; padding: 12px 20px;
-        margin-top: 15px; border-radius: 0 0 16px 16px;
-        display: flex; align-items: center; gap: 10px;
-    }
-    .dot { width: 10px; height: 10px; border-radius: 50%; }
-    
-    /* Aplica a animação */
-    .dot-green { background-color: #10b981; animation: pulse-green 2s infinite; }
-    .dot-yellow { background-color: #f59e0b; animation: pulse-yellow 2s infinite; }
-    
-    .footer-text { font-size: 0.85rem; font-weight: 700; }
-    .txt-green { color: #047857; }
-    .txt-yellow { color: #d97706; }
-
-    /* --- 4. O TICKET GERADO (NOVO!) --- */
-    .ticket-container {
-        background-color: #fff;
-        border: 2px dashed #cbd5e1;
+    .loteria-name { font-size: 1.1rem; letter-spacing: 0.5px; text-transform: uppercase; }
+    .next-conc { 
+        font-size: 0.75rem; 
+        background: rgba(255,255,255,0.2); 
+        padding: 4px 10px; 
         border-radius: 12px;
+    }
+
+    /* --- CORPO DO CARD --- */
+    .card-body {
         padding: 20px;
         text-align: center;
+        flex-grow: 1;
+    }
+
+    /* Status e Prêmio */
+    .status-pill {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 5px 12px;
+        border-radius: 20px;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+    }
+    .st-acumulado { background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; }
+    .st-normal { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+
+    .prize-value {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 5px;
+        font-family: 'Segoe UI', sans-serif;
+    }
+    .prize-label { font-size: 0.8rem; color: #94a3b8; margin-bottom: 20px; }
+
+    /* Bolas (Visual Limpo) */
+    .balls-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
         margin-top: 10px;
-        position: relative;
     }
-    .ticket-header {
-        font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 10px;
+    .ball-display {
+        width: 32px; height: 32px;
+        background: #f1f5f9;
+        color: #334155;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; font-size: 0.9rem;
+        border: 1px solid #e2e8f0;
     }
-    .ticket-balls {
-        display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    /* Destaque para Loto (menor) */
+    .ball-sm { width: 28px; height: 28px; font-size: 0.8rem; }
+
+    /* --- RODAPÉ (Inteligência) --- */
+    .card-foot {
+        background: #f8fafc;
+        padding: 12px 20px;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .ai-signal { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 700; }
+    .dot-pulse { width: 10px; height: 10px; border-radius: 50%; }
+    
+    .sig-go { color: #059669; }
+    .dot-go { background: #10b981; animation: pulse-border 2s infinite; }
+    
+    .sig-wait { color: #d97706; }
+    .dot-wait { background: #f59e0b; }
+    
+    /* --- TICKET VISUAL (Manteve-se igual) --- */
+    .ticket-container {
+        background: #fff; border: 2px dashed #cbd5e1; border-radius: 12px;
+        padding: 20px; text-align: center; margin-top: 10px;
     }
     .ball-ticket {
-        width: 40px; height: 40px;
-        color: white; border-radius: 50%;
+        width: 40px; height: 40px; color: white; border-radius: 50%;
         display: flex; align-items: center; justify-content: center;
         font-weight: 800; font-size: 1.1rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 </style>
 """
 
-def get_cores(nome_loteria):
-    """Define as cores baseadas na marca da loteria"""
-    nome = nome_loteria.lower()
-    if "lotof" in nome: # Lotofácil (Roxo)
-        return "#9d174d", "linear-gradient(135deg, #d946ef, #c026d3)"
-    elif "quina" in nome: # Quina (Azul Escuro/Roxo)
-        return "#4338ca", "linear-gradient(135deg, #6366f1, #4338ca)"
-    elif "mega" in nome: # Mega (Verde/Azul)
-        return "#1e3a8a", "linear-gradient(135deg, #3b82f6, #2563eb)"
-    else: # Padrão
-        return "#374151", "linear-gradient(135deg, #6b7280, #4b5563)"
+def get_style(nome):
+    """Retorna Cores e Classes baseadas no nome"""
+    n = nome.lower()
+    if "lotof" in n: return "#9d174d", "ball-sm" # Roxo
+    if "mega" in n: return "#1e40af", ""         # Azulão
+    if "quina" in n: return "#4338ca", ""        # Índigo
+    if "mania" in n: return "#ea580c", ""        # Laranja
+    return "#475569", ""                         # Cinza Padrão
+
+def formatar_moeda(valor):
+    """Tenta formatar string numérica para R$"""
+    try:
+        # Remove simbolos e converte
+        v_str = str(valor).replace("R$", "").replace(".", "").replace(",", ".")
+        v_float = float(v_str)
+        return f"R$ {v_float:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    except:
+        return str(valor) # Retorna original se falhar
 
 def gerar_html_card(nome_loteria, motor):
-    """Gera o Card do Dashboard"""
+    """
+    Gera o NOVO CARD MODERNO
+    """
+    # 1. Dados Básicos
     txt_sinal, tipo_sinal = motor.analisar_sinal()
-    cor_texto, gradiente_bola = get_cores(nome_loteria)
-
+    cor_header, classe_bola = get_style(nome_loteria)
+    
+    # 2. Extração Segura de Dados
+    concurso_atual = "--"
+    prox_concurso = "--"
+    premio_display = "Apurando..."
+    numeros = []
+    
     try:
         if motor.df is not None and not motor.df.empty:
             last = motor.df.iloc[0]
-            concurso = last.get('Concurso', '--')
-            numeros = []
+            concurso_atual = str(last.get('Concurso', '--'))
+            
+            # Tenta calcular o próximo
+            try: prox_concurso = str(int(concurso_atual) + 1)
+            except: prox_concurso = "Prox"
+
+            # Tenta achar o Prêmio (Procura colunas comuns)
+            colunas_premio = ['Prêmio Estimado', 'Estimativa Próximo', 'Valor Acumulado', 'Acumulado']
+            for col in colunas_premio:
+                if col in last:
+                    val = last.get(col)
+                    if val and str(val).strip() not in ['0', '0,00', '']:
+                        premio_display = formatar_moeda(val)
+                        break
+            
+            # Números
             for c in motor.cols:
                 val = last.get(c)
                 try: 
                     if val and str(val).strip(): numeros.append(int(float(val)))
                 except: pass
-        else:
-            numeros = []; concurso = "--"
-    except: numeros = []; concurso = "Erro"
+    except: pass
 
-    # HTML Components
+    # 3. Lógica de Status
+    status_class = "st-normal"
+    status_text = "SORTEIO REALIZADO"
+    
+    # Se o sinal do motor detectou acumulado
     if "ACUMULADO" in txt_sinal or "ACUMULOU" in txt_sinal:
-        badge = '<span class="status-badge bg-acumulado">Acumulou! 💰</span>'
-    else:
-        badge = '<span class="status-badge bg-normal">Normal</span>'
+        status_class = "st-acumulado"
+        status_text = "ACUMULOU! 💰"
+        # Se não achou prêmio na coluna, coloca um aviso genérico legal
+        if premio_display == "Apurando...": premio_display = "Prêmio Milionário"
 
-    classe_luz = "dot-green" if tipo_sinal == "go" else "dot-yellow"
-    classe_txt = "txt-green" if tipo_sinal == "go" else "txt-yellow"
+    # 4. Estilos do Rodapé (Sinal)
+    dot_class = "dot-go" if tipo_sinal == "go" else "dot-wait"
+    txt_class = "sig-go" if tipo_sinal == "go" else "sig-wait"
 
-    html_bolas = "".join([f'<div class="ball-dash" style="background:{gradiente_bola}">{n}</div>' for n in numeros])
+    # HTML das bolas
+    html_bolas = "".join([f'<div class="ball-display {classe_bola}">{n}</div>' for n in numeros])
 
     return f"""
-    <div class="card-loteria" style="border-top: 4px solid {cor_texto}">
-        <div class="card-header">
-            <div>
-                <div class="card-title" style="color:{cor_texto}">{nome_loteria}</div>
-                <div class="card-conc">Conc. {concurso}</div>
-            </div>
-            {badge}
+    <div class="card-loteria">
+        <div class="card-top" style="background: {cor_header}">
+            <div class="loteria-name">{nome_loteria}</div>
+            <div class="next-conc">Próx: {prox_concurso}</div>
         </div>
-        <div class="balls-container">{html_bolas}</div>
-        <div class="card-footer">
-            <div class="dot {classe_luz}"></div>
-            <div class="footer-text {classe_txt}">{txt_sinal}</div>
+
+        <div class="card-body">
+            <div class="status-pill {status_class}">{status_text}</div>
+            
+            <div class="prize-value">{premio_display}</div>
+            <div class="prize-label">Estimativa para o prêmio</div>
+            
+            <div style="font-size:0.75rem; color:#ccc; margin-bottom:5px">Último: {concurso_atual}</div>
+            <div class="balls-wrapper">
+                {html_bolas}
+            </div>
+        </div>
+
+        <div class="card-foot">
+            <div class="ai-signal {txt_class}">
+                <div class="dot-pulse {dot_class}"></div>
+                {txt_sinal}
+            </div>
+            <div style="font-size:1.2rem">🤖</div>
         </div>
     </div>
     """
 
 def gerar_ticket_visual(nome_loteria, numeros):
-    """
-    NOVO: Gera um visual de 'Bilhete Impresso' para o palpite gerado.
-    """
-    cor_texto, gradiente_bola = get_cores(nome_loteria)
-    
-    html_bolas = "".join([f'<div class="ball-ticket" style="background:{gradiente_bola}">{int(n)}</div>' for n in numeros])
-    
+    cor, _ = get_style(nome_loteria)
+    html_bolas = "".join([f'<div class="ball-ticket" style="background:{cor}">{int(n)}</div>' for n in numeros])
     return f"""
     <div class="ticket-container">
-        <div class="ticket-header">Palpite Gerado • {nome_loteria}</div>
-        <div class="ticket-balls">
-            {html_bolas}
+        <div style="text-transform:uppercase; color:#94a3b8; font-size:0.8rem; margin-bottom:10px">
+            Palpite Gerado • {nome_loteria}
         </div>
-        <div style="margin-top:10px; font-size:0.7rem; color:#94a3b8;">
-            Estratégia Matemática Aplicada
+        <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
+            {html_bolas}
         </div>
     </div>
     """
