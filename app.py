@@ -7,22 +7,22 @@ import json
 from datetime import datetime
 import time
 
-# --- 1. CONFIGURAÇÃO DA PÁGINA (Primeira linha obrigatória) ---
+# --- 1. CONFIGURAÇÃO DA PÁGINA (Deve ser a primeira linha executável) ---
 st.set_page_config(page_title="Oráculo Master Pro", page_icon="🔮", layout="wide")
 
-# --- 2. IMPORTS DOS MÓDULOS (Motores e Design) ---
+# --- 2. IMPORTS DOS MÓDULOS (Lógica e Design) ---
 try:
-    # Lógica Matemática (Back-end)
+    # Motores Matemáticos (Back-end)
     from motores.base import MotorBase
     from motores.mega_sena import MotorMegaSena
     from motores.lotofacil import MotorLotofacil
     
-    # Design Visual (Front-end)
+    # Interface Visual (Front-end)
     from interface.dashboard_cards import CSS_ESTILO, gerar_html_card, gerar_ticket_visual
 
 except ImportError as e:
     st.error(f"❌ Erro Crítico de Importação: {e}")
-    st.info("Verifique se as pastas 'motores' e 'interface' existem no GitHub e possuem o arquivo '__init__.py'.")
+    st.info("Verifique se as pastas 'motores' e 'interface' existem no GitHub e contêm os arquivos '__init__.py'.")
     st.stop()
 
 # --- 3. INFRAESTRUTURA (Configuração e Conexão) ---
@@ -32,7 +32,7 @@ def get_config_url():
     try:
         return st.secrets["setup"]["url_config_json"]
     except Exception:
-        st.error("⚠️ Link do JSON não encontrado na seção [setup] do secrets.toml.")
+        st.error("⚠️ Erro: Link do JSON não encontrado na seção [setup] do secrets.toml.")
         st.stop()
 
 @st.cache_data(ttl=600)
@@ -50,35 +50,35 @@ def load_config():
         st.error(f"Erro de Conexão GitHub: {e}")
         return None
 
-# Carrega a configuração ANTES de tentar conectar ao Google
+# Carrega a configuração global
 CONFIG_GLOBAL = load_config()
 if not CONFIG_GLOBAL: st.stop()
 
 @st.cache_resource
 def connect_google():
-    """Conecta ao Google Sheets"""
+    """Autenticação com Google Sheets"""
     try:
         if "gcp_service_account" not in st.secrets:
-            st.error("Credenciais do Google (gcp_service_account) não encontradas.")
+            st.error("Credenciais do Google (gcp_service_account) ausentes nos Secrets.")
             return None
         
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
         creds = ServiceAccountCredentials.from_json_keyfile_dict(dict(st.secrets["gcp_service_account"]), scope)
         return gspread.authorize(creds).open_by_key(CONFIG_GLOBAL["spreadsheet_id"])
     except Exception as e:
-        st.error(f"Erro Google Sheets: {e}")
+        st.error(f"Erro ao conectar no Google Sheets: {e}")
         return None
 
 # --- 4. FUNÇÕES OPERACIONAIS (Fábrica e CRUD) ---
 
 def obter_motor(nome_loteria, df, config):
-    """Factory: Escolhe o motor matemático correto"""
+    """Factory Pattern: Retorna a classe especialista correta"""
     if nome_loteria == "Mega Sena": return MotorMegaSena(df, config)
     elif nome_loteria == "Lotofácil": return MotorLotofacil(df, config)
     else: return MotorBase(df, config)
 
 def get_data(conn, tab):
-    """Lê dados da aba com segurança"""
+    """Lê os dados da planilha com tratamento de erro"""
     try:
         ws = conn.worksheet(tab)
         data = ws.get_all_values()
@@ -87,18 +87,18 @@ def get_data(conn, tab):
     except: return None
 
 def save_row(conn, tab, row):
-    """Salva uma linha na aba"""
+    """Salva um novo palpite na aba"""
     try:
         try: ws = conn.worksheet(tab)
         except: 
             ws = conn.add_worksheet(title=tab, rows=1000, cols=10)
             ws.append_row(["Data", "Concurso Alvo", "Dezenas", "Estratégia", "Acertos", "Status"])
         ws.append_row(row)
-        return True, "Palpite registrado com sucesso!"
+        return True, "✅ Palpite registrado com sucesso na nuvem!"
     except Exception as e: return False, str(e)
 
 def delete_rows(conn, tab, mode, val):
-    """Deleta registros com lógica avançada"""
+    """Gerencia a exclusão de registros"""
     try:
         ws = conn.worksheet(tab)
         data = ws.get_all_values()
@@ -118,7 +118,7 @@ def delete_rows(conn, tab, mode, val):
         ws.clear()
         ws.append_row(header)
         if not df.empty: ws.update('A2', df.values.tolist())
-        return True, f"{orig_len - len(df)} registros apagados."
+        return True, f"{orig_len - len(df)} registros removidos."
     except Exception as e: return False, str(e)
 
 # --- 5. INICIALIZAÇÃO DA INTERFACE ---
@@ -126,79 +126,86 @@ def delete_rows(conn, tab, mode, val):
 conn = connect_google()
 if not conn: st.stop()
 
-# Injeta o CSS Avançado (Pulse, Clean Design, Ticket)
+# Injeta o CSS Global (Design Moderno e Animações)
 st.markdown(CSS_ESTILO, unsafe_allow_html=True)
 
-# --- BARRA LATERAL (STATUS MONITOR) ---
+# --- BARRA LATERAL (MONITORAMENTO) ---
 with st.sidebar:
-    st.header("🔌 Conectividade")
+    st.header("🔌 Status do Sistema")
     
-    # GitHub
+    # Indicador GitHub
     status_gh = "ONLINE ✅" if CONFIG_GLOBAL else "OFFLINE ❌"
-    color_gh = "#dcfce7" if CONFIG_GLOBAL else "#fee2e2"
+    bg_gh = "#dcfce7" if CONFIG_GLOBAL else "#fee2e2"
     border_gh = "#86efac" if CONFIG_GLOBAL else "#fca5a5"
-    text_gh = "#166534" if CONFIG_GLOBAL else "#991b1b"
+    color_gh = "#166534" if CONFIG_GLOBAL else "#991b1b"
     
     st.markdown(f"""
-    <div style='padding:10px; border-radius:8px; background-color:{color_gh}; border:1px solid {border_gh}; color:{text_gh}; margin-bottom:10px; font-size:0.85rem'>
+    <div style='padding:12px; border-radius:8px; background-color:{bg_gh}; border:1px solid {border_gh}; color:{color_gh}; margin-bottom:10px; font-size:0.85rem'>
         <b>🐙 GitHub Config:</b><br>{status_gh}
     </div>""", unsafe_allow_html=True)
 
-    # Google
-    status_go = "CONECTADO ✅" if conn else "ERRO ❌"
-    color_go = "#dbeafe" if conn else "#fee2e2"
+    # Indicador Google Sheets
+    status_go = "CONECTADO ✅" if conn else "FALHA ❌"
+    bg_go = "#dbeafe" if conn else "#fee2e2"
     border_go = "#93c5fd" if conn else "#fca5a5"
-    text_go = "#1e40af" if conn else "#991b1b"
+    color_go = "#1e40af" if conn else "#991b1b"
 
     st.markdown(f"""
-    <div style='padding:10px; border-radius:8px; background-color:{color_go}; border:1px solid {border_go}; color:{text_go}; font-size:0.85rem'>
+    <div style='padding:12px; border-radius:8px; background-color:{bg_go}; border:1px solid {border_go}; color:{color_go}; font-size:0.85rem'>
         <b>📊 Google Sheets:</b><br>{status_go}
     </div>""", unsafe_allow_html=True)
     
     st.markdown("---")
-    st.caption(f"Sincronizado às: {datetime.now().strftime('%H:%M:%S')}")
+    st.caption(f"Sincronização: {datetime.now().strftime('%H:%M:%S')}")
 
 # --- CORPO PRINCIPAL ---
 st.title("📊 Painel de Controle Oráculo")
 
-# 1. DASHBOARD DE CARTÕES
-cols_dash = st.columns(len(CONFIG_GLOBAL["loterias"]))
+# 1. DASHBOARD INTELIGENTE (GRID LAYOUT)
+# Distribui os cards em colunas de 3 em 3 para visual moderno
+COLS_PER_ROW = 3
+loterias_items = list(CONFIG_GLOBAL["loterias"].items())
 
-for i, (nome_lot, cfg) in enumerate(CONFIG_GLOBAL["loterias"].items()):
-    with cols_dash[i]:
-        # Carrega dados
-        df_card = get_data(conn, cfg['aba_historico'])
-        
-        # Blindagem: Só desenha se tiver dados
-        if df_card is not None and not df_card.empty:
-            motor_temp = obter_motor(nome_lot, df_card, cfg)
-            # Gera HTML Visual da pasta Interface
-            html_card = gerar_html_card(nome_lot, motor_temp)
-            st.markdown(html_card, unsafe_allow_html=True)
-        else:
-            st.warning(f"{nome_lot}: Aguardando dados...")
+for i in range(0, len(loterias_items), COLS_PER_ROW):
+    cols = st.columns(COLS_PER_ROW)
+    for j in range(COLS_PER_ROW):
+        if i + j < len(loterias_items):
+            nome_lot, cfg = loterias_items[i + j]
+            with cols[j]:
+                # Busca dados rápidos para o card
+                df_card = get_data(conn, cfg['aba_historico'])
+                
+                if df_card is not None and not df_card.empty:
+                    # Instancia motor temporário para análise de sinal
+                    motor_temp = obter_motor(nome_lot, df_card, cfg)
+                    # Renderiza HTML moderno da pasta Interface
+                    html_card = gerar_html_card(nome_lot, motor_temp)
+                    st.markdown(html_card, unsafe_allow_html=True)
+                else:
+                    st.warning(f"{nome_lot}: Sincronizando dados...")
 
 st.markdown("---")
 
-# 2. ÁREA DE OPERAÇÃO
+# 2. CENTRAL DE OPERAÇÕES
 st.subheader("🛠️ Central de Operações")
 
 escolha = st.selectbox("Selecione a Loteria:", list(CONFIG_GLOBAL["loterias"].keys()))
 cfg_atual = CONFIG_GLOBAL["loterias"][escolha]
 
+# Carrega a base completa para operação
 df_main = get_data(conn, cfg_atual['aba_historico'])
 
 if df_main is not None and not df_main.empty:
-    # Instancia Motor Especializado
+    # Instancia o Motor Matemático Principal
     MotorAtivo = obter_motor(escolha, df_main, cfg_atual)
     
     tab_gerar, tab_gestao = st.tabs(["🎲 Gerador & Estratégia", "📂 Gestão de Palpites"])
     
-    # --- ABA GERADOR ---
+    # --- ABA 1: GERADOR ---
     with tab_gerar:
         c1, c2 = st.columns(2)
         with c1:
-            st.markdown(f"**Inteligência: {escolha}**")
+            st.markdown(f"**Inteligência Ativa: {escolha}**")
             stats = MotorAtivo.get_stats()
             
             if stats['quentes']:
@@ -208,7 +215,7 @@ if df_main is not None and not df_main.empty:
             estrategia = st.radio("Selecione a Estratégia:", ["Equilíbrio", "Tendência", "Mestre"])
             
             if st.button("🔮 Gerar Palpite Otimizado", type="primary"):
-                # Executa a lógica matemática da pasta 'motores'
+                # Executa a matemática do motor selecionado
                 jogo_gerado = MotorAtivo.gerar_palpite(estrategia)
                 st.session_state['jogo_atual'] = jogo_gerado
         
@@ -217,11 +224,9 @@ if df_main is not None and not df_main.empty:
             if 'jogo_atual' in st.session_state:
                 nums = st.session_state['jogo_atual']
                 
-                # --- VISUAL NOVO: TICKET ---
-                # Gera o visual de bilhete impresso da pasta 'interface'
+                # Renderiza o visual de "Ticket" (Cupom)
                 html_ticket = gerar_ticket_visual(escolha, nums)
                 st.markdown(html_ticket, unsafe_allow_html=True)
-                # ---------------------------
                 
                 st.write("") 
                 
@@ -239,12 +244,12 @@ if df_main is not None and not df_main.empty:
                         "", "Pendente"
                     ]
                     
-                    with st.spinner("Sincronizando com Google Drive..."):
+                    with st.spinner("Conectando ao banco de dados..."):
                         ok, msg = save_row(conn, cfg_atual['aba_palpites'], row)
                         if ok: st.success(msg)
                         else: st.error(msg)
 
-    # --- ABA GESTÃO ---
+    # --- ABA 2: GESTÃO ---
     with tab_gestao:
         st.markdown(f"**Visualizando Aba:** `{cfg_atual['aba_palpites']}`")
         df_palp = get_data(conn, cfg_atual['aba_palpites'])
@@ -268,7 +273,7 @@ if df_main is not None and not df_main.empty:
                 st.write("")
                 st.write("")
                 if st.button("🗑️ Executar Exclusão"):
-                    with st.spinner("Deletando registros..."):
+                    with st.spinner("Processando exclusão..."):
                         ok, msg = delete_rows(conn, cfg_atual['aba_palpites'], modo_del, val_del)
                         if ok: 
                             st.success(msg)
@@ -276,7 +281,7 @@ if df_main is not None and not df_main.empty:
                             st.rerun()
                         else: st.error(msg)
         else:
-            st.info("Nenhum palpite salvo nesta loteria.")
+            st.info("Nenhum histórico de palpites encontrado.")
 
 else:
-    st.info(f"Aguardando dados da loteria {escolha}...")
+    st.info(f"Carregando base de dados da loteria {escolha}...")
