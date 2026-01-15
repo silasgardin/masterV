@@ -21,7 +21,7 @@
     },
     "Dia de Sorte": {
       "aba_historico": "Dia_de_Sorte",
-      "aba_palpites": "Palpites_Diadesorte",
+      "aba_palpites": "Palpites_diadesorte",
       "max_dezenas": 31,
       "tamanho_jogo": 7
     },
