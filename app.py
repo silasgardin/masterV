@@ -16,13 +16,20 @@ try:
     from motores.base import MotorBase
     from motores.mega_sena import MotorMegaSena
     from motores.lotofacil import MotorLotofacil
+    # Novos Motores (Se o arquivo não existir, o try/except evita o crash)
+    try: from motores.quina import MotorQuina
+    except ImportError: MotorQuina = None
+    try: from motores.dia_de_sorte import MotorDiaDeSorte
+    except ImportError: MotorDiaDeSorte = None
+    try: from motores.dupla_sena import MotorDuplaSena
+    except ImportError: MotorDuplaSena = None
     
     # Interface Visual (Front-end)
     from interface.dashboard_cards import CSS_ESTILO, gerar_html_card, gerar_ticket_visual
 
 except ImportError as e:
     st.error(f"❌ Erro Crítico de Importação: {e}")
-    st.info("Verifique se as pastas 'motores' e 'interface' existem no GitHub e contêm os arquivos '__init__.py'.")
+    st.info("Verifique se as pastas 'motores' e 'interface' existem no GitHub.")
     st.stop()
 
 # --- 3. INFRAESTRUTURA (Configuração e Conexão) ---
@@ -73,9 +80,22 @@ def connect_google():
 
 def obter_motor(nome_loteria, df, config):
     """Factory Pattern: Retorna a classe especialista correta"""
-    if nome_loteria == "Mega Sena": return MotorMegaSena(df, config)
-    elif nome_loteria == "Lotofácil": return MotorLotofacil(df, config)
-    else: return MotorBase(df, config)
+    nome = nome_loteria.lower()
+    
+    # Roteamento Inteligente
+    if "mega" in nome: 
+        return MotorMegaSena(df, config)
+    elif "facil" in nome or "fácil" in nome: 
+        return MotorLotofacil(df, config)
+    elif "quina" in nome and MotorQuina: 
+        return MotorQuina(df, config)
+    elif "dia" in nome and "sorte" in nome and MotorDiaDeSorte: 
+        return MotorDiaDeSorte(df, config)
+    elif "dupla" in nome and MotorDuplaSena: 
+        return MotorDuplaSena(df, config)
+    else: 
+        # Fallback para o motor genérico se não tiver específico
+        return MotorBase(df, config)
 
 def get_data(conn, tab):
     """Lê os dados da planilha com tratamento de erro"""
@@ -182,7 +202,7 @@ for i in range(0, len(loterias_items), COLS_PER_ROW):
                     html_card = gerar_html_card(nome_lot, motor_temp)
                     st.markdown(html_card, unsafe_allow_html=True)
                 else:
-                    st.warning(f"{nome_lot}: Sincronizando dados...")
+                    st.warning(f"{nome_lot}: Sincronizando...")
 
 st.markdown("---")
 
