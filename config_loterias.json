@@ -2,14 +2,14 @@
   "spreadsheet_id": "1Uawi-DjZiY5wVZyqntQYctboRPqvu1vBFoiL7h4GkMw",
   "loterias": {
     "Mega Sena": {
-      "aba_historico": "Mega Sena",
-      "aba_palpites": "Palpites_Mega",
+      "aba_historico": "Mega_Sena",
+      "aba_palpites": "Palpites_Megasena",
       "max_dezenas": 60,
       "tamanho_jogo": 6
     },
     "Lotofácil": {
-      "aba_historico": "Lotofácil",
-      "aba_palpites": "Palpites_Loto",
+      "aba_historico": "Lotofacil",
+      "aba_palpites": "Palpites_Lotofacil",
       "max_dezenas": 25,
       "tamanho_jogo": 15
     },
